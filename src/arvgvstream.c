@@ -344,6 +344,7 @@ _process_data_block (ArvGvStreamThreadData *thread_data,
 		arv_debug_stream_thread ("[GvStream::process_data_block] Received resent packet %u for frame %" G_GUINT64_FORMAT,
 				       packet_id, frame->frame_id);
 	}
+    printf("Frame %d\n", packet_id);
     printtime("End of data");
 }
 
