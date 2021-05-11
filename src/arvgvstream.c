@@ -41,6 +41,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
+#include <sys/time.h>
 
 #if ARAVIS_HAS_PACKET_SOCKET
 #include <ifaddrs.h>
@@ -63,6 +64,16 @@
 #define ARV_GV_STREAM_PACKET_REQUEST_RATIO_DEFAULT	0.25
 
 #define ARV_GV_STREAM_DISCARD_LATE_FRAME_THRESHOLD	100
+
+void printtime(char * to_print)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    unsigned long long msSinceEpoch =
+        (unsigned long long)(tv.tv_sec) * 1000 + 
+        (unsigned long long)(tv.tv_usec) / 1000;
+    printf("%s: %llu\n", to_print, msSinceEpoch);
+}
 
 enum {
 	ARV_GV_STREAM_PROPERTY_0,
@@ -333,6 +344,7 @@ _process_data_block (ArvGvStreamThreadData *thread_data,
 		arv_debug_stream_thread ("[GvStream::process_data_block] Received resent packet %u for frame %" G_GUINT64_FORMAT,
 				       packet_id, frame->frame_id);
 	}
+    printtime("End of data");
 }
 
 static void
