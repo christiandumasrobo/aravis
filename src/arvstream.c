@@ -116,6 +116,7 @@ arv_stream_pop_buffer (ArvStream *stream)
 
 	g_return_val_if_fail (ARV_IS_STREAM (stream), NULL);
 
+    printf("Test\n");
 	return g_async_queue_pop (priv->output_queue);
 }
 
