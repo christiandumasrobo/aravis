@@ -710,6 +710,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 		ArvGvspPacketType packet_type = arv_gvsp_packet_get_packet_type (packet);
 
 		if (arv_gvsp_packet_type_is_error (packet_type)) {
+            printtime("Packet type error");
 			arv_info_stream_thread ("[GvStream::process_packet]"
 						 " Error packet at dt = %" G_GINT64_FORMAT ", packet id = %u"
 						 " frame id = %" G_GUINT64_FORMAT,
@@ -721,6 +722,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 			thread_data->n_error_packets++;
 		} else if (packet_id < frame->n_packets &&
 		           frame->packet_data[packet_id].received) {
+            printtime("Duplicate Packet");
 			/* Ignore duplicate packet */
 			thread_data->n_duplicated_packets++;
 			arv_debug_stream_thread ("[GvStream::process_packet] Duplicated packet %d for frame %" G_GUINT64_FORMAT,
