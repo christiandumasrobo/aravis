@@ -768,7 +768,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 	} else
 		thread_data->n_ignored_packets++;
 
-    printtime("beginning of process");
+    printtime("end of process");
 
 	return frame;
 }
