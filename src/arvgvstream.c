@@ -697,6 +697,8 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 	frame_id = arv_gvsp_packet_get_frame_id (packet);
 	packet_id = arv_gvsp_packet_get_packet_id (packet);
 
+    printtime("beginning of process");
+
 	if (thread_data->first_packet) {
 		thread_data->last_frame_id = frame_id - 1;
 		thread_data->first_packet = FALSE;
@@ -766,6 +768,8 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 	} else
 		thread_data->n_ignored_packets++;
 
+    printtime("beginning of process");
+
 	return frame;
 }
 
@@ -820,7 +824,6 @@ _loop (ArvGvStreamThreadData *thread_data)
 			frame = NULL;
 
 		_check_frame_completion (thread_data, time_us, frame);
-        printtime("After check frame completion");
 
 	} while (!g_cancellable_is_cancelled (thread_data->cancellable));
 
