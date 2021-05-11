@@ -352,6 +352,7 @@ _process_data_trailer (ArvGvStreamThreadData *thread_data,
 		       ArvGvStreamFrameData *frame,
 		       guint32 packet_id)
 {
+    printtime("beginning of trailer");
 	if (frame->buffer->priv->status != ARV_BUFFER_STATUS_FILLING)
 		return;
 
@@ -365,6 +366,7 @@ _process_data_trailer (ArvGvStreamThreadData *thread_data,
 		arv_debug_stream_thread ("[GvStream::process_data_trailer] Received resent packet %u for frame %" G_GUINT64_FORMAT,
 				       packet_id, frame->frame_id);
 	}
+    printtime("end of trailer");
 }
 
 static ArvGvStreamFrameData *
@@ -759,6 +761,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 			}
 
 			_missing_packet_check (thread_data, frame, packet_id, time_us);
+            printtime("After missing packet check");
 		}
 	} else
 		thread_data->n_ignored_packets++;
@@ -817,6 +820,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 			frame = NULL;
 
 		_check_frame_completion (thread_data, time_us, frame);
+        printtime("After check frame completion");
 
 	} while (!g_cancellable_is_cancelled (thread_data->cancellable));
 
@@ -825,6 +829,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 
 	arv_gpollfd_finish_all (poll_fd,1);
 	g_free (packet);
+    printtime("After packet freed");
 }
 
 
@@ -1055,9 +1060,11 @@ arv_gv_stream_thread (void *data)
 		_loop (thread_data);
 
 	_flush_frames (thread_data);
+    printtime("After frame flushed");
 
 	if (thread_data->callback != NULL)
 		thread_data->callback (thread_data->callback_data, ARV_STREAM_CALLBACK_TYPE_EXIT, NULL);
+    printtime("After thread data callback");
 
 	return NULL;
 }
