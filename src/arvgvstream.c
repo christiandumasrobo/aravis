@@ -779,6 +779,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 static void
 _loop (ArvGvStreamThreadData *thread_data)
 {
+    printtime("Beginning of _loop");
 	ArvGvStreamFrameData *frame;
 	ArvGvspPacket *packet;
 	GPollFD poll_fd[2];
@@ -1090,6 +1091,7 @@ arv_gv_stream_get_port (ArvGvStream *gv_stream)
 static void
 arv_gv_stream_start_thread (ArvStream *stream)
 {
+    printtime("Beginning of start thread");
 	ArvGvStreamPrivate *priv = arv_gv_stream_get_instance_private (ARV_GV_STREAM (stream));
 	ArvGvStreamThreadData *thread_data;
 
@@ -1099,6 +1101,7 @@ arv_gv_stream_start_thread (ArvStream *stream)
 	thread_data = priv->thread_data;
 
 	thread_data->cancellable = g_cancellable_new ();
+    printtime("Endish of start thread");
 	priv->thread = g_thread_new ("arv_gv_stream", arv_gv_stream_thread, priv->thread_data);
 }
 
