@@ -65,7 +65,7 @@
 
 #define ARV_GV_STREAM_DISCARD_LATE_FRAME_THRESHOLD	100
 
-void printtime(char * to_print)
+unsigned long long printtime(char * to_print)
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -73,6 +73,7 @@ void printtime(char * to_print)
         (unsigned long long)(tv.tv_sec) * 1000 + 
         (unsigned long long)(tv.tv_usec) / 1000;
     printf("%s: %llu\n", to_print, msSinceEpoch);
+    return msSinceEpoch;
 }
 
 enum {
@@ -749,8 +750,11 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 					       ARV_DEBUG_LEVEL_TRACE :
 					       ARV_DEBUG_LEVEL_DEBUG);
 
+            static int block_num;
 			switch (content_type) {
 				case ARV_GVSP_CONTENT_TYPE_DATA_LEADER:
+                    unsigned long long lead_time = printtime("");
+                    printf("Block number: %d\n", block_num++);
 					_process_data_leader (thread_data, frame, packet, packet_id);
 					break;
 				case ARV_GVSP_CONTENT_TYPE_DATA_BLOCK:
@@ -758,6 +762,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 							     packet_size);
 					break;
 				case ARV_GVSP_CONTENT_TYPE_DATA_TRAILER:
+                    printf("Elapsed time between leader and trailer: %llu\n", printtime("") - lead_time);
 					_process_data_trailer (thread_data, frame, packet_id);
 					break;
 				default:
