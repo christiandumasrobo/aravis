@@ -618,6 +618,8 @@ _check_frame_completion (ArvGvStreamThreadData *thread_data,
 			continue;
 		}
 
+        printf("last valid packet: %d n_packets - 1: %d", frame->last_valid_packet, frame->n_packets - 1);
+        printtime("Testing close frame values\n");
 		if (can_close_frame &&
 		    frame->last_valid_packet == frame->n_packets - 1) {
             printtime("Close frame success\n");
