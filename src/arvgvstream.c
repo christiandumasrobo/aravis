@@ -751,9 +751,10 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 					       ARV_DEBUG_LEVEL_DEBUG);
 
             static int block_num;
+            unsigned long long lead_time = 0;
 			switch (content_type) {
 				case ARV_GVSP_CONTENT_TYPE_DATA_LEADER:
-                    unsigned long long lead_time = printtime("");
+                    lead_time = printtime("");
                     printf("Block number: %d\n", block_num++);
 					_process_data_leader (thread_data, frame, packet, packet_id);
 					break;
