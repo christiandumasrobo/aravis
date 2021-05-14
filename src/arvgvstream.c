@@ -607,6 +607,7 @@ _check_frame_completion (ArvGvStreamThreadData *thread_data,
 		if (can_close_frame &&
 		    thread_data->packet_resend == ARV_GV_STREAM_PACKET_RESEND_NEVER &&
 		    iter->next != NULL) {
+            printtime("Close frame missing packets\n");
 			frame->buffer->priv->status = ARV_BUFFER_STATUS_MISSING_PACKETS;
 			arv_info_stream_thread ("[GvStream::check_frame_completion] Incomplete frame %" G_GUINT64_FORMAT,
 						 frame->frame_id);
@@ -619,6 +620,7 @@ _check_frame_completion (ArvGvStreamThreadData *thread_data,
 
 		if (can_close_frame &&
 		    frame->last_valid_packet == frame->n_packets - 1) {
+            printtime("Close frame success\n");
 			frame->buffer->priv->status = ARV_BUFFER_STATUS_SUCCESS;
 			arv_debug_stream_thread ("[GvStream::check_frame_completion] Completed frame %" G_GUINT64_FORMAT,
 					       frame->frame_id);
@@ -631,6 +633,7 @@ _check_frame_completion (ArvGvStreamThreadData *thread_data,
 
 		if (can_close_frame &&
 		    time_us - frame->last_packet_time_us >= thread_data->frame_retention_us) {
+            printtime("Close frame timeout\n");
 			frame->buffer->priv->status = ARV_BUFFER_STATUS_TIMEOUT;
 			arv_warning_stream_thread ("[GvStream::check_frame_completion] Timeout for frame %"
 						   G_GUINT64_FORMAT " at dt = %" G_GUINT64_FORMAT,
