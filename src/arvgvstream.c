@@ -829,6 +829,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 			poll_fd[0].revents = 0;
 			n_events = g_poll (poll_fd, use_poll ?  2 : 1, timeout_ms);
 			errsv = errno;
+            printtime("POLL");
 
 		} while (n_events < 0 && errsv == EINTR);
 
