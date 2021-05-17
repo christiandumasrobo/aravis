@@ -72,6 +72,7 @@ unsigned long long printtime(char * to_print)
     unsigned long long msSinceEpoch =
         (unsigned long long)(tv.tv_sec) * 1000 + 
         (unsigned long long)(tv.tv_usec) / 1000;
+    printf("aravis: ");
     printf("%s: %llu\n", to_print, msSinceEpoch);
     return msSinceEpoch;
 }
@@ -346,7 +347,7 @@ _process_data_block (ArvGvStreamThreadData *thread_data,
 				       packet_id, frame->frame_id);
 	}
     printf("Frame %d\n", packet_id);
-    printtime("End of data");
+    printtime("End of _process_data_block");
 }
 
 static void
@@ -354,7 +355,7 @@ _process_data_trailer (ArvGvStreamThreadData *thread_data,
 		       ArvGvStreamFrameData *frame,
 		       guint32 packet_id)
 {
-    printtime("beginning of trailer");
+    printtime("beginning of _process_data_trailer");
 	if (frame->buffer->priv->status != ARV_BUFFER_STATUS_FILLING)
 		return;
 
@@ -368,7 +369,7 @@ _process_data_trailer (ArvGvStreamThreadData *thread_data,
 		arv_debug_stream_thread ("[GvStream::process_data_trailer] Received resent packet %u for frame %" G_GUINT64_FORMAT,
 				       packet_id, frame->frame_id);
 	}
-    printtime("end of trailer");
+    printtime("end of _process_data_trailer");
 }
 
 static ArvGvStreamFrameData *
@@ -704,7 +705,7 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 	frame_id = arv_gvsp_packet_get_frame_id (packet);
 	packet_id = arv_gvsp_packet_get_packet_id (packet);
 
-    printtime("beginning of process");
+    printtime("beginning of _process_packet");
 
 	if (thread_data->first_packet) {
 		thread_data->last_frame_id = frame_id - 1;
@@ -777,12 +778,12 @@ _process_packet (ArvGvStreamThreadData *thread_data, const ArvGvspPacket *packet
 			}
 
 			_missing_packet_check (thread_data, frame, packet_id, time_us);
-            printtime("After missing packet check");
+            printtime("After _missing_packet_check");
 		}
 	} else
 		thread_data->n_ignored_packets++;
 
-    printtime("end of process");
+    printtime("end of _process_packet");
 
 	return frame;
 }
@@ -847,7 +848,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 
 	arv_gpollfd_finish_all (poll_fd,1);
 	g_free (packet);
-    printtime("After packet freed");
+    printtime("End of _loop");
 }
 
 
@@ -1078,7 +1079,7 @@ arv_gv_stream_thread (void *data)
 		_loop (thread_data);
 
 	_flush_frames (thread_data);
-    printtime("After frame flushed");
+    printtime("After _flush_frames in arv_gv_stream_thread");
 
 	if (thread_data->callback != NULL)
 		thread_data->callback (thread_data->callback_data, ARV_STREAM_CALLBACK_TYPE_EXIT, NULL);
