@@ -827,7 +827,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 
 		do {
 			poll_fd[0].revents = 0;
-			n_events = g_poll (poll_fd, use_poll ?  2 : 1, timeout_ms);
+			n_events = g_poll (poll_fd, use_poll ?  2 : 1, 1);
 			errsv = errno;
             printtime("POLL");
 
