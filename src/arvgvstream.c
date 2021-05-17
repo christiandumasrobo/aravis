@@ -830,6 +830,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 
 		time_us = g_get_monotonic_time ();
 
+        printtime("Before packet processed");
 		if (poll_fd[0].revents != 0) {
 			arv_gpollfd_clear_one (&poll_fd[0], thread_data->socket);
 			read_count = g_socket_receive (thread_data->socket, (char *) packet,
@@ -838,6 +839,7 @@ _loop (ArvGvStreamThreadData *thread_data)
 			frame = _process_packet (thread_data, packet, read_count, time_us);
 		} else
 			frame = NULL;
+        printtime("After packet processed");
 
 		_check_frame_completion (thread_data, time_us, frame);
 
