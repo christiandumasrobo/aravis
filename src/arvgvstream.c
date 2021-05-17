@@ -805,12 +805,14 @@ _loop (ArvGvStreamThreadData *thread_data)
 	poll_fd[0].fd = g_socket_get_fd (thread_data->socket);
 	poll_fd[0].events =  G_IO_IN;
 	poll_fd[0].revents = 0;
+    printtime("After get socket fd");
 
 	arv_gpollfd_prepare_all(poll_fd,1);
 
 	packet = g_malloc0 (ARV_GV_STREAM_INCOMING_BUFFER_SIZE);
 
 	use_poll = g_cancellable_make_pollfd (thread_data->cancellable, &poll_fd[1]);
+    printtime("After make pollfd");
 
 	do {
 		int n_events;
@@ -820,6 +822,8 @@ _loop (ArvGvStreamThreadData *thread_data)
 			timeout_ms = thread_data->packet_timeout_us / 1000;
 		else
 			timeout_ms = ARV_GV_STREAM_POLL_TIMEOUT_US / 1000;
+
+        printtime("Before polling");
 
 		do {
 			poll_fd[0].revents = 0;
