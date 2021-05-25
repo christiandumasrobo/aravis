@@ -571,8 +571,8 @@ _close_frame (ArvGvStreamThreadData *thread_data, ArvGvStreamFrameData *frame)
 	    frame->buffer->priv->status != ARV_BUFFER_STATUS_ABORTED)
 		thread_data->n_missing_packets += (int) frame->n_packets - (frame->last_valid_packet + 1);
 
-    printtime("success");
-	//arv_stream_push_output_buffer (thread_data->stream, frame->buffer);
+    //printtime("success");
+	arv_stream_push_output_buffer (thread_data->stream, frame->buffer);
 	if (thread_data->callback != NULL)
 		thread_data->callback (thread_data->callback_data,
 				       ARV_STREAM_CALLBACK_TYPE_BUFFER_DONE,
